@@ -26,6 +26,12 @@ app.UseHttpsRedirection();
 
 
 
-app.MapGet("/", () => "Hola a todos!");
+app.MapGet("/", () 
+    => Results.Ok("Hola a todos!"));
+
+app.MapGet("/bienvenidos", () 
+    => Results.NotFound("No se encontró el recurso"));
+
+app.MapPost("/todo", () => "Se agregó un pendiente");
 
 app.Run();
