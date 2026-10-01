@@ -5,7 +5,7 @@
 namespace ToDo.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Agrega_ToDoItems : Migration
+    public partial class AddToDoItemTableInDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,14 +14,14 @@ namespace ToDo.Api.Migrations
                 name: "ToDoItems",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ToDoItems", x => x.id);
+                    table.PrimaryKey("PK_ToDoItems", x => x.Id);
                 });
         }
 

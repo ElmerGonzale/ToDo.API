@@ -23,23 +23,42 @@ namespace ToDo.Api.Migrations
 
             modelBuilder.Entity("ToDo.Api.Models.ToDoItem", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("ToDoItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsCompleted = false,
+                            Name = "Pentiente 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsCompleted = true,
+                            Name = "Pentiente 2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsCompleted = false,
+                            Name = "Pentiente 3"
+                        });
                 });
 #pragma warning restore 612, 618
         }

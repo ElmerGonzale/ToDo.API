@@ -11,8 +11,8 @@ using ToDo.Api.Data;
 namespace ToDo.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260924184315_Cambia-Long-Name-ToDoItems")]
-    partial class CambiaLongNameToDoItems
+    [Migration("20261001173234_AddToDoItemTableInDb")]
+    partial class AddToDoItemTableInDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,21 +26,20 @@ namespace ToDo.Api.Migrations
 
             modelBuilder.Entity("ToDo.Api.Models.ToDoItem", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("ToDoItems");
                 });
