@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using ToDo.Api.Data;
 using ToDo.Api.DTOs;
@@ -21,66 +22,47 @@ namespace ToDo.Api.Endpoints
 
 
         private static async Task<IResult> GetAllToDoItems 
-            (AppDbContext dbContext)
+            (AppDbContext dbContext, IMapper mapper)
                 { 
                     var toDoItemDtos = await dbContext.
-                    ToDoItems.Select(p => new ToDoItemDto()
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        IsCompleted = p.IsCompleted,
-                    })
+                    ToDoItems.Select(p => mapper.Map<ToDoItemDto>(p))
                     .ToListAsync();
-
-            //var ToDoItemDto = new List<ToDoItemDto>();
-            //foreach (var t in toDoItems){
-            //    toDoItems.Add(new DTOs.ToDoItemDto()
-            //    {
-            //        Id = t.Id,
-            //        Name = t.Name,
-            //        IsCompleted = t.IsCompleted,
-            //    });
-            //}
+                                                        //var ToDoItemDto = new List<ToDoItemDto>();
+                                                        //foreach (var t in toDoItems){
+                                                        //    toDoItems.Add(new DTOs.ToDoItemDto()
+                                                        //    {
+                                                        //        Id = t.Id,
+                                                        //        Name = t.Name,
+                                                        //        IsCompleted = t.IsCompleted,
+                                                        //    });
+                                                        //}
                     return Results.Ok(toDoItemDtos);
                 }
         private static async Task<IResult> GetToDoItemById(
-            AppDbContext dbContext, int id)
+             int id, AppDbContext dbContext, IMapper mapper)
         {
             var toDoItem = await dbContext.ToDoItems.FirstOrDefaultAsync(tdi => tdi.Id == id);
             if (toDoItem is null)
             {
                 return Results.NotFound();
             }
-            var toDoItemDto = new ToDoItemDto()
-            {
-                Id = toDoItem.Id,
-                Name = toDoItem.Name,
-                IsCompleted = toDoItem.IsCompleted,
-            };
+            var toDoItemDto = mapper.Map<ToDoItemDto>(toDoItem);
             return Results.Ok(toDoItemDto);
         }
         private static async Task<IResult> CreateToDoItem
-            (AppDbContext dbContext, CreateToDoItemDto createToDoItemDto)
+            (CreateToDoItemDto createToDoItemDto, AppDbContext dbContext, IMapper mapper)
         {
-            var toDoItem = new ToDoItem()
-            {
-                Name = createToDoItemDto.Name,
-                IsCompleted = false
-            };
-                await dbContext.ToDoItems.AddAsync(toDoItem);
-                await dbContext.SaveChangesAsync();
+            var toDoItem = mapper.Map<ToDoItem>(createToDoItemDto);
+            toDoItem.IsCompleted = false;
+            await dbContext.ToDoItems.AddAsync(toDoItem);
+            await dbContext.SaveChangesAsync();
 
-            var toDoItemDto = new ToDoItemDto()
-            {
-                Id = toDoItem.Id,
-                Name = toDoItem.Name,
-                IsCompleted = toDoItem.IsCompleted
-            };
+            var toDoItemDto = mapper.Map<ToDoItemDto>(toDoItem);
                 return Results.Created($"/api/pendientes/{toDoItem.Id}", toDoItemDto);
         }
 
         private static async Task<IResult> UpdateToDoItem
-            (AppDbContext dbContext, int id, UpdateToDoItemDto item)
+            (int id, UpdateToDoItemDto item, AppDbContext dbContext, IMapper mapper)
         {
             var toDoItem = await dbContext.
                     ToDoItems.
@@ -97,7 +79,7 @@ namespace ToDo.Api.Endpoints
         }
 
         private static async Task<IResult> DeleteToDoItem
-            (AppDbContext dbContext, int id)
+            (int id, AppDbContext dbContext)
                 {
                     var toDoItem = await dbContext.
                     ToDoItems.
