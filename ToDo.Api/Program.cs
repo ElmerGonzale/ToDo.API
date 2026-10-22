@@ -7,6 +7,7 @@ using ToDo.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 //Agrega el servicio para la cadena a la base de datos SQL server
 builder.Services.AddDbContext<AppDbContext>
@@ -19,6 +20,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.CreateMap<ToDoItem, ToDoItemDto>();
     cfg.CreateMap<UpdateToDoItemDto, ToDoItem>();
 });
+builder.Services.AddValidation();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
